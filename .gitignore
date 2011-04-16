@@ -1,0 +1,4 @@
+/config.py
+*.pyc
+.buzz2weibo_history
+/*.json

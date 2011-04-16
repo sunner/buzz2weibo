@@ -1,0 +1,19 @@
+# vim: set fileencoding=utf-8 :
+
+# 用户参数配置
+
+BUZZ_USERID    = 'username@gmail.com'
+WEIBO_USERNAME = 'weibo username'
+WEIBO_PASSWORD = 'weibo password'
+
+# 是否使用https连接google
+USE_HTTPS = False
+
+# 保存同步历史的文件路径
+HISTORY_FILE = '.buzz2weibo_history'
+
+# 调试模式下，不会真的发微博，只打印状态
+DEBUG = False
+
+# 下载然后传到微博的图片临时存放目录
+IMAGES_PATH = '/tmp/buzz2weibo'
