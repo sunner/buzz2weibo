@@ -10,7 +10,7 @@ WEIBO_PASSWORD = 'weibo password'
 USE_HTTPS = False
 
 # 保存同步历史的文件路径
-HISTORY_FILE = '.buzz2weibo_history'
+HISTORY_FILE = '/PATH/TO/.buzz2weibo_history'
 
 # 调试模式下，不会真的发微博，只打印状态
 DEBUG = False
