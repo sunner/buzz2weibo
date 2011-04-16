@@ -41,5 +41,5 @@ python buzz2weibo.py
 链接
 ----
 
-主页：https://github.com/sunner/buzz2weibo
-Bugs：https://github.com/sunner/buzz2weibo/issues
+主页： https://github.com/sunner/buzz2weibo
+Bugs： https://github.com/sunner/buzz2weibo/issues
