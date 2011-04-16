@@ -14,7 +14,6 @@ WEIBO_APP_KEY = '3127127763'
 def post2weibo(api, act):
     
     message = act.content + act.link
-    message = message.encode('utf-8')
     if act.geo != '':
         geo = act.geo.split(' ')
     else:
@@ -38,7 +37,6 @@ def post2weibo(api, act):
         f.write(data)
         f.close()
 
-        filename = filename.encode('utf-8')
         status = api.upload(filename, status=message, lat=geo[0], long=geo[1])
     else:
         status = api.update_status(status=message, lat=geo[0], long=geo[1])
@@ -93,7 +91,9 @@ for item in buzz['data']['items']:
 
     # 同步未同步过的
     if act.id not in synced_ids:
+        print '-----------------------'
         print 'syncing ' + act.id
+        print item['source']['title']
         if act.content != '':
             print act.content
         if act.link != '':
@@ -104,7 +104,6 @@ for item in buzz['data']['items']:
             print act.image_filename
         if act.geo != '':
             print act.geo
-        print '------'
 
         if not DEBUG:
 

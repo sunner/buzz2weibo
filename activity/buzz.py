@@ -9,12 +9,12 @@ import htmllib
 
 class BuzzActivity(object):
     
-    link = u''
-    geo = u''
-    content = u''
-    image = u''
-    image_filename = u''
-    id = u''
+    link = ''
+    geo = ''
+    content = ''
+    image = ''
+    image_filename = ''
+    id = ''
 
     def __init__(self, activity):
 
@@ -23,6 +23,9 @@ class BuzzActivity(object):
         self.setContent(activity)
         self.setGeo(activity)
         self.setImage(activity)
+
+        # 不用utf-8，weibopy罢工，命令行重定向之类也出错
+        self.encode('utf-8')
 
 
     def setID(self, activity):
@@ -73,3 +76,12 @@ class BuzzActivity(object):
         p.feed(s)
         return p.save_end()
 
+    def encode(self, codeset):
+        """转换成员变量字符集"""
+
+        self.link           = self.link.encode(codeset)
+        self.geo            = self.geo.encode(codeset)
+        self.content        = self.content.encode(codeset)
+        self.image          = self.image.encode(codeset)
+        self.image_filename = self.image_filename.encode(codeset)
+        self.id             = self.id.encode(codeset)
