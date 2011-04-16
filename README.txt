@@ -9,7 +9,9 @@ buzz2weibo - 同步Google Buzz到新浪微博
 * 同步文字，这个自然
 * 将buzz中的第一个图片上传
 * 同步地理坐标，如果有的话
-* 如果buzz里有链接，或者是发自Google Reader，链接也被同步
+* 如果buzz附有链接，或者是发自Google Reader，链接也被同步
+* 每次运行缺省只同步3条，防止被新浪微博暂时封禁
+* 如果会编程，activity/下从BuzzActivity派生一个类，可以个性化处理特定的源（比如你的博客）
 
 运行条件
 --------
