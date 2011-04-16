@@ -14,7 +14,6 @@ WEIBO_APP_KEY = '3127127763'
 def post2weibo(api, act):
     
     message = act.content + act.link
-    message = message.encode("utf-8")
     if act.geo != '':
         geo = act.geo.split(' ')
     else:
@@ -38,7 +37,8 @@ def post2weibo(api, act):
         f.write(data)
         f.close()
 
-        status = api.upload(filename, status=message, lat=geo[0], long=geo[1])
+        #status = api.upload(filename, status=message, lat=geo[0], long=geo[1])
+        status = api.update_status(status=message, lat=geo[0], long=geo[1])
     else:
         status = api.update_status(status=message, lat=geo[0], long=geo[1])
 

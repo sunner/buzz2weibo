@@ -7,5 +7,6 @@ class GoogleMapsformobileActivity(BuzzActivity):
 
     def setImage(self, activity):
         super(GoogleMapsformobileActivity, self).setImage(activity)
+        self.image = self.image.replace('https://', 'http://', 1)
         self.image_filename += '.jpg'
 
