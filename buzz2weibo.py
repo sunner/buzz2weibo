@@ -93,21 +93,19 @@ for item in buzz['data']['items']:
 
     # 同步未同步过的
     if act.id not in synced_ids:
-        if DEBUG:
-            print '------'
-            print 'syncing ' + act.id
-            if act.content != '':
-                print act.content
-            if act.link != '':
-                print act.link
-            if act.image != '':
-                print act.image
-            if act.image_filename != '':
-                print act.image_filename
-            if act.geo != '':
-                print act.geo
-            print '------'
-        else:
+        print 'syncing ' + act.id
+        if act.content != '':
+            print act.content
+        if act.link != '':
+            print act.link
+        if act.image != '':
+            print act.image
+        if act.image_filename != '':
+            print act.image_filename
+        if act.geo != '':
+            print act.geo
+        print '------'
+        if not DEBUG:
             post2weibo(api, act)
             synced_ids.add(act.id)
 
