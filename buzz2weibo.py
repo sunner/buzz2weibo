@@ -11,6 +11,9 @@ import os, errno
 
 WEIBO_APP_KEY = '3127127763'
 
+# 运行一次最多同步几条。缺省3。连续同步太多会被休息的
+WEIBO_MAX_SYNC_COUNT = 3
+
 def post2weibo(api, act):
     
     message = act.content + act.link
@@ -80,6 +83,7 @@ except IOError  as (errno, strerror):
         raise
 
 # 开始同步
+count = 0
 for item in buzz['data']['items']:
 
     # 解析buzz
@@ -116,4 +120,6 @@ for item in buzz['data']['items']:
                 fp.write(id + '\n')
             fp.close()
 
-
+    count = count + 1
+    if count >= WEIBO_MAX_SYNC_COUNT:
+        break
