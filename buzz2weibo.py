@@ -105,13 +105,16 @@ for item in buzz['data']['items']:
         if act.geo != '':
             print act.geo
         print '------'
+
         if not DEBUG:
+
             post2weibo(api, act)
             synced_ids.add(act.id)
 
-# 将同步过的activity id写入历史文件
-fp = open(HISTORY_FILE, 'w')
-for id in synced_ids:
-    fp.write(id + '\n')
-fp.close()
+            # 将同步过的activity id写入历史文件
+            fp = open(HISTORY_FILE, 'w')
+            for id in synced_ids:
+                fp.write(id + '\n')
+            fp.close()
+
 
