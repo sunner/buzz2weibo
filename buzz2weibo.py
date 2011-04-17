@@ -94,9 +94,10 @@ for item in buzz['data']['items']:
 
     # 解析buzz
     try:
+        # 如果来源名是“Source Name”，就用SourceNameActivity处理
         act = eval(item['source']['title'].replace(' ', '') + 'Activity(item)')
     except NameError:
-        # use WildcardActivity as default
+        # SourceNameActivity没有，就跳到这里，用WildcardActivity做缺省处理
         act = WildcardActivity(item);
 
     # 同步未同步过的
