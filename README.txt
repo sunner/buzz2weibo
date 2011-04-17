@@ -34,9 +34,13 @@ buzz2weibo - 同步Google Buzz到新浪微博
 配置
 ----
 
-将config.py.sample复制为config.py，然后编辑config.py，详见里面的注释
+在解压目录下，运行
 
-运行
+python setup.py
+
+跟随屏幕操作
+
+使用
 ----
 
 python buzz2weibo.py

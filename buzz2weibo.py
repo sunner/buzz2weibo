@@ -5,11 +5,12 @@ from config import *
 from urllib2 import urlopen, URLError
 from json import load
 from activity import *
-from weibopy.auth import BasicAuthHandler
+from weibopy.auth import OAuthHandler
 from weibopy.api import API
 import os, errno
 
 WEIBO_APP_KEY = '3127127763'
+WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
 
 # 运行一次最多同步几条。缺省3。连续同步太多会被休息的
 WEIBO_MAX_SYNC_COUNT = 3
@@ -66,8 +67,9 @@ buzz = load(fp)
 fp.close()
 
 # 微博认证
-auth = BasicAuthHandler(WEIBO_USERNAME, WEIBO_PASSWORD)
-api = API(auth, source=WEIBO_APP_KEY)
+auth = OAuthHandler(WEIBO_APP_KEY, WEIBO_APP_SECRET)
+auth.setToken(WEIBO_TOKEN_KEY, WEIBO_TOKEN_SECRET)
+api = API(auth)
 
 
 # 读已经同步过的activity id
