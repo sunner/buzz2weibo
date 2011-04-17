@@ -53,3 +53,5 @@ python buzz2weibo.py
 
 主页： https://github.com/sunner/buzz2weibo
 Bugs： https://github.com/sunner/buzz2weibo/issues
+作者Buzz： https://profiles.google.com/u/0/sunner/buzz
+作者微博： http://weibo.com/sunnersun
