@@ -11,7 +11,7 @@ from json import load
 from activity import *
 from weibopy.auth import OAuthHandler
 from weibopy.api import API
-import os, errno
+import os, errno, sys
 
 WEIBO_APP_KEY = '3127127763'
 WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
@@ -49,6 +49,12 @@ def post2weibo(api, act):
         status = api.upload(filename, status=message, lat=geo[0], long=geo[1])
     else:
         status = api.update_status(status=message, lat=geo[0], long=geo[1])
+
+# 测试config.py文件是否存在
+
+if not os.path.exists(sys.path[0] + os.sep + 'config.py'):
+    print '找不到配置文件。请先运行setup.py'
+    sys.exit(1)
 
 # 建图片目录
 try:
