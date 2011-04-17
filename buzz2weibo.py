@@ -27,6 +27,7 @@ def post2weibo(api, act):
     else:
         geo = [None, None]
 
+    act.image = '' # 暂时禁用图片上传
     if act.image != '':
 
         # 下载图像文件
