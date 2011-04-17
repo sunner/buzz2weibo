@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
+# buzz2weibo
+# Copyright 2011 Sun Zhigang
+# See LICENSE for details.
+
 from config import *
 from urllib2 import urlopen, URLError
 from json import load

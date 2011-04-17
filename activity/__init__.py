@@ -1,5 +1,9 @@
 # vim: set fileencoding=utf-8 :
 
+# buzz2weibo
+# Copyright 2011 Sun Zhigang
+# See LICENSE for details.
+
 # Copyright 2009-2010 Joshua Roesslein
 # See LICENSE for details.
 

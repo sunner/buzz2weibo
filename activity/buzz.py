@@ -1,5 +1,9 @@
 # vim: set fileencoding=utf-8 :
 
+# buzz2weibo
+# Copyright 2011 Sun Zhigang
+# See LICENSE for details.
+
 # 每条Buzz的基类。
 # 如果要对某种来源做特别处理，需要继承此类。
 # 例如来源是Google Reader，就派生一个GoogleReaderActivity
