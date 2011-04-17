@@ -52,8 +52,8 @@ def post2weibo(api, act):
 # 建图片目录
 try:
     os.makedirs(IMAGES_PATH)
-except OSError as exc: # Python >2.5
-    if exc.errno == errno.EEXIST:
+except OSError, e:
+    if e.errno == errno.EEXIST:
         pass
     else:
         raise
@@ -83,9 +83,9 @@ try:
     for line in fp:
         synced_ids.add(line.strip())
     fp.close()
-except IOError  as (errno, strerror):
+except IOError, e:
     # 如果文件不存在，就继续；否则，触发异常
-    if errno != 2:
+    if e.errno != errno.ENOENT:
         raise
 
 # 开始同步
