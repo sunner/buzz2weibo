@@ -7,7 +7,8 @@
 
 from weibopy.auth import OAuthHandler
 from weibopy.api import API
-from urllib2 import HTTPError
+from urllib2 import urlopen, URLError, HTTPError
+from json import load
 import sys, os
 import codecs
 
@@ -28,6 +29,17 @@ http://profiles.google.com/u/0/sunner/about
 但如果链接中没有您的用户名，那么就只有那串纯数字是您的BuzzID
 '''
 buzz_userid = raw_input('请输入BuzzID：').strip()
+
+print '''验证BuzzID'''
+people_url = 'https://www.googleapis.com/buzz/v1/people/' + buzz_userid + '/@self?alt=json'
+fp = urlopen(people_url)
+people = load(fp)
+fp.close()
+yn = raw_input('您的姓名是“%s”吗？(Y/N)：' % people['data']['displayName'].encode('utf-8')).strip()
+
+if yn[0].lower() != 'y':
+    print '''请重新运行本向导，输入正确的BuzzID。'''
+    sys.exit(1)
 
 # OAuth begins
 
