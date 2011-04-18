@@ -18,7 +18,16 @@ print '''欢迎使用buzz2weibo配置向导！
 ===========================
 本向导会使用您输入的数据，在当前目录创建config.py文件。
 '''
-buzz_userid = raw_input('请输入buzz用户名（例如：username@gmail.com）：').strip()
+
+print '''为了获得您的BuzzID，请访问 http://profiles.google.com 
+登录后，地址栏会变成类似这样：
+http://profiles.google.com/u/0/106019261651260565998/about
+或者这样：
+http://profiles.google.com/u/0/sunner/about
+无论是哪样，其中最长的那串纯数字，或者您的google用户名就是您的BuzzID
+但如果链接中没有您的用户名，那么就只有那串纯数字是您的BuzzID
+'''
+buzz_userid = raw_input('请输入BuzzID：').strip()
 
 # OAuth begins
 
