@@ -53,6 +53,12 @@ class BuzzActivity(object):
         # 去掉所有html tag
         self.content = self.unescape(re.sub('<[^<]+?>', '', activity['object']['content']))
 
+        # 取链接里的文本
+        if activity['object'].has_key('attachments'):
+            for attach in activity['object']['attachments']:
+                if attach['type'] == 'article':
+                    self.content += ' ' + attach['content']
+
 
 
     def setGeo(self, activity):
