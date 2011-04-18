@@ -38,7 +38,6 @@ def post2weibo(api, act):
             u.close()
         except URLError:
             # 如果下载不下来，表示……，就别试了，当普通消息发吧
-            raise
             status = api.update_status(status=message, lat=geo[0], long=geo[1])
             return
 
