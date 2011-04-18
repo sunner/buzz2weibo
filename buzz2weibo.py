@@ -11,6 +11,7 @@ from json import load
 from activity import *
 from weibopy.auth import OAuthHandler
 from weibopy.api import API
+from time import sleep
 import os, errno, sys
 
 WEIBO_APP_KEY = '3127127763'
@@ -97,7 +98,9 @@ except IOError, e:
 
 # 开始同步
 count = 0
-for item in buzz['data']['items']:
+items = buzz['data']['items']
+items.reverse()  # Buzz是后发的在前，所以翻转一下。感谢王瑞珩的建议
+for item in items:
 
     # 解析buzz
     try:
@@ -134,6 +137,8 @@ for item in buzz['data']['items']:
                 fp.write(id + '\n')
             fp.close()
 
-    count = count + 1
-    if count >= WEIBO_MAX_SYNC_COUNT:
-        break
+        count = count + 1
+        if count >= WEIBO_MAX_SYNC_COUNT:
+            break
+
+        sleep(1)  # 延时才能让新浪微博按正确顺序显示
