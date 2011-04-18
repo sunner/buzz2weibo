@@ -5,7 +5,6 @@
 # Copyright 2011 Sun Zhigang
 # See LICENSE for details.
 
-from config import *
 from weibopy.auth import OAuthHandler
 from weibopy.api import API
 from urllib2 import HTTPError
