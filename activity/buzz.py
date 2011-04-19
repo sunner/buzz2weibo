@@ -31,6 +31,9 @@ class BuzzActivity(object):
         # 不用utf-8，weibopy罢工，命令行重定向之类也出错
         self.encode('utf-8')
 
+        # 把链接里的https改成http。t.cn只支持http
+        self.link = self.link.replace('https://', 'http://', 1)
+
 
     def setID(self, activity):
         """从activity取出ID"""
