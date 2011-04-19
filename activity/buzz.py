@@ -78,7 +78,7 @@ class BuzzActivity(object):
             for attach in activity['object']['attachments']:
                 if attach['type'] == 'photo':
                     self.image = attach['links']['enclosure'][0]['href']
-        self.image_filename = self.image.split('/')[-1]
+        self.image_filename = self.image.split('/')[-1][0:10]
 
 
     def unescape(self, s):
