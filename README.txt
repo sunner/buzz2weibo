@@ -1,7 +1,7 @@
 buzz2weibo - 同步Google Buzz到新浪微博
 ======================================
 
-将Google Buzz上的每条消息以最佳的形式同步到新浪微博。
+将Google Buzz上的public消息以最佳形式同步到新浪微博。
 
 特性
 ----
@@ -11,6 +11,7 @@ buzz2weibo - 同步Google Buzz到新浪微博
 * 同步地理坐标，如果有的话
 * 如果buzz附有链接，或者是发自Google Reader，链接也被同步
 * 每次运行缺省只同步3条，防止被新浪微博暂时封禁
+* 只同步public的buzz，保护private的私密
 * 如果会编程，activity/下从BuzzActivity派生一个类，可以个性化处理特定的源（比如你的博客）
 
 运行条件
