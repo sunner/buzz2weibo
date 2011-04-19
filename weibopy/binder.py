@@ -100,7 +100,7 @@ def bind_api(**config):
                 self.parameters.setdefault('source',self.api.source)
             
             if len(self.parameters):
-                if self.method == 'GET' or 'DELETE':
+                if self.method == 'GET' or self.method == 'DELETE':
                     url = '%s?%s' % (url, urllib.urlencode(self.parameters))  
                 else:
                     self.headers.setdefault("User-Agent","python")
