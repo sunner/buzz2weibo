@@ -83,6 +83,9 @@ IMAGES_PATH = '/tmp/buzz2weibo'
 
 # 调试模式下，不会真的发微博，只打印状态
 DEBUG = False
+
+# 是否附带buzz链接
+APPEND_SHARE_FROM_BUZZ_LINK = True
 ''' % (buzz_userid, weibo_token_key, weibo_token_secret, sys.path[0] + os.sep)
 
 fp = codecs.open('config.py', 'w', 'utf-8')

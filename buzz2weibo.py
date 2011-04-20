@@ -23,6 +23,9 @@ WEIBO_MAX_SYNC_COUNT = 3
 def post2weibo(api, act):
     
     message = act.content + act.link
+    if APPEND_SHARE_FROM_BUZZ_LINK:
+        message += u' //转发自%s'.encode('utf-8') % act.origin_link
+
     if act.geo != '':
         geo = act.geo.split(' ')
     else:
@@ -113,6 +116,7 @@ for item in items:
         print '-----------------------'
         print 'syncing ' + act.id
         print item['source']['title']
+        print act.origin_link
         if act.content != '':
             print act.content
         if act.link != '':

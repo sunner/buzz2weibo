@@ -19,6 +19,7 @@ class BuzzActivity(object):
     image = ''
     image_filename = ''
     id = ''
+    origin_link = ''
 
     def __init__(self, activity):
 
@@ -27,12 +28,13 @@ class BuzzActivity(object):
         self.setContent(activity)
         self.setGeo(activity)
         self.setImage(activity)
+        self.setOriginLink(activity)
 
         # 不用utf-8，weibopy罢工，命令行重定向之类也出错
         self.encode('utf-8')
 
-        # 把链接里的https改成http。t.cn只支持http
-        self.link = self.link.replace('https://', 'http://', 1)
+        # t.cn只支持http
+        self.link = self.https2http(self.link)
 
 
     def setID(self, activity):
@@ -80,6 +82,11 @@ class BuzzActivity(object):
                     self.image = attach['links']['enclosure'][0]['href']
         self.image_filename = self.image.split('/')[-1][0:10]
 
+    def setOriginLink(self, activity):
+        """从activity取出到buzz的链接"""
+
+        # t.cn只支持http
+        self.origin_link = self.https2http(activity['links']['alternate'][0]['href'])
 
     def unescape(self, s):
         """解码html转义"""
@@ -98,3 +105,10 @@ class BuzzActivity(object):
         self.image          = self.image.encode(codeset)
         self.image_filename = self.image_filename.encode(codeset)
         self.id             = self.id.encode(codeset)
+        self.origin_link    = self.origin_link.encode(codeset)
+
+    def https2http(self, httpslink):
+        """将https链接转为http链接"""
+
+        return httpslink.replace('https://', 'http://', 1)
+
