@@ -21,3 +21,4 @@ from mobile import MobileActivity
 from gtalk import GooglechatstatusActivity
 from twitter import TwitterActivity
 from gmaps import GoogleMapsformobileActivity
+from sunner import HelloWorldActivity
