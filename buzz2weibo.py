@@ -11,6 +11,7 @@ from json import load
 from activity import *
 from weibopy.auth import OAuthHandler
 from weibopy.api import API
+from weibopy.error import WeibopError
 from time import sleep
 import os, errno, sys
 
@@ -31,6 +32,7 @@ def post2weibo(api, act):
     else:
         geo = [None, None]
 
+    include_image = False
     if act.image != '':
 
         # 下载图像文件
@@ -40,17 +42,33 @@ def post2weibo(api, act):
             u.close()
         except URLError:
             # 如果下载不下来，表示……，就别试了，当普通消息发吧
-            status = api.update_status(status=message, lat=geo[0], long=geo[1])
-            return
+            pass
+        else:
+            filename = IMAGES_PATH + '/' + act.image_filename
+            f = open(filename, 'w')
+            f.write(data)
+            f.close()
+            include_image = True
 
-        filename = IMAGES_PATH + '/' + act.image_filename
-        f = open(filename, 'w')
-        f.write(data)
-        f.close()
+    while (True):
+        try:
+            if include_image:
+                api.upload(filename, status=message, lat=geo[0], long=geo[1])
+            else:
+                api.update_status(status=message, lat=geo[0], long=geo[1])
+        except WeibopError, e:
+            if e.reason.find('error_code:400,40013:Error:') == 0:
+                # 微博太长，剪裁且留原始链接。原始链接不会太长，所以不会死循环
+                message = unicode(message, 'utf-8')[0:80] + u'....更多:'
+                message = message.encode('utf-8') + act.origin_link
+                print u'内容过长，截断发表:'
+                print message
+            else:
+                raise
+        else:
+            break
 
-        status = api.upload(filename, status=message, lat=geo[0], long=geo[1])
-    else:
-        status = api.update_status(status=message, lat=geo[0], long=geo[1])
+    return True
 
 # 测试config.py文件是否存在
 
@@ -128,9 +146,10 @@ for item in items:
         if act.geo != '':
             print act.geo
 
-        if not DEBUG:
+        if DEBUG:
+            continue
 
-            post2weibo(api, act)
+        if post2weibo(api, act):
             synced_ids.add(act.id)
 
             # 将同步过的activity id写入历史文件
@@ -139,8 +158,8 @@ for item in items:
                 fp.write(id + '\n')
             fp.close()
 
-        count = count + 1
-        if count >= WEIBO_MAX_SYNC_COUNT:
-            break
+            count = count + 1
+            if count >= WEIBO_MAX_SYNC_COUNT:
+                break
 
-        sleep(1)  # 延时才能让新浪微博按正确顺序显示
+            sleep(1)  # 延时才能让新浪微博按正确顺序显示
