@@ -93,4 +93,4 @@ fp.write(config)
 fp.close()
 
 print ''
-print 'config.py生成完毕，运行buzz2weibo.py开始同步'
+print 'config.py生成完毕，运行buzz2weibo.py开始同步。编辑config.py可以做更多个性化设置'

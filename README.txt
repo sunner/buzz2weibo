@@ -15,16 +15,18 @@ buzz2weibo - 同步Google Buzz到新浪微博
 * 在新浪微博显示到buzz的链接
 * 如果会编程，activity/下从BuzzActivity派生一个类，可以个性化处理特定的源（比如你的博客）
 
+
 运行条件
 --------
 
 这是一个在你自己的机器运行的程序，它不是一个网络服务，至少目前不是。
 
-要运行buzz2weibo，必须满足如下条件
+buzz2weibo的运行，必须满足如下条件
 
 * python 2.6 及以上版本
 * 能周期定时执行本程序，否则只能每次手工运行
 * 畅通的网络，非一般的畅通，你懂的
+
 
 安装
 ----
@@ -33,6 +35,7 @@ buzz2weibo - 同步Google Buzz到新浪微博
 
 当然用git clone会更舒服
 
+
 配置
 ----
 
@@ -40,7 +43,8 @@ buzz2weibo - 同步Google Buzz到新浪微博
 
 python setup.py
 
-跟随屏幕操作
+跟随屏幕操作。完成后，编辑config.py可以配置更多参数
+
 
 使用
 ----
