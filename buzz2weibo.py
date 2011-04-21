@@ -107,8 +107,8 @@ for item in items:
     try:
         # 如果来源名是“Source Name”，就用SourceNameActivity处理
         act = eval(item['source']['title'].replace(' ', '') + 'Activity(item)')
-    except NameError:
-        # SourceNameActivity没有，就跳到这里，用WildcardActivity做缺省处理
+    except (NameError, SyntaxError):
+        # SourceNameActivity没有，或者Source Name是中文，用WildcardActivity做缺省处理
         act = WildcardActivity(item);
 
     # 同步未同步过的
