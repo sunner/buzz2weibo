@@ -79,7 +79,7 @@ class BuzzActivity(object):
         if activity['object'].has_key('attachments'):
             for attach in activity['object']['attachments']:
                 if attach['type'] == 'photo':
-                    self.image = attach['links']['enclosure'][0]['href']
+                    self.image = self.https2http(attach['links']['enclosure'][0]['href'])
         self.image_filename = self.image.split('/')[-1][-10:]
         if not self.image_filename.lower().endswith('.jpg') and \
            not self.image_filename.lower().endswith('.jpeg') and \
