@@ -81,6 +81,13 @@ class BuzzActivity(object):
                 if attach['type'] == 'photo':
                     self.image = attach['links']['enclosure'][0]['href']
         self.image_filename = self.image.split('/')[-1][-10:]
+        if not self.image_filename.lower().endswith('.jpg') and \
+           not self.image_filename.lower().endswith('.jpeg') and \
+           not self.image_filename.lower().endswith('.png') and \
+           not self.image_filename.lower().endswith('.gif'):
+                # 先不管三七二一，都当jpg吧
+                self.image_filename += '.jpg'
+
 
     def setOriginLink(self, activity):
         """从activity取出到buzz的链接"""
