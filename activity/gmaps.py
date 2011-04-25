@@ -8,7 +8,3 @@ from buzz import BuzzActivity
 
 class GoogleMapsformobileActivity(BuzzActivity):
     """post from google maps for android"""
-
-    def setImage(self, activity):
-        """先什么都不做"""
-
