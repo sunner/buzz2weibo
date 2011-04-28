@@ -55,8 +55,10 @@ class BuzzActivity(object):
     def setContent(self, activity):
         """从activity取出应发到微博的文字内容"""
 
-        # 去掉所有html tag
-        self.content = self.unescape(re.sub('<[^<]+?>', '', activity['object']['content']))
+        # 组合评注和内容，并去掉所有html tag
+        if activity.has_key('annotation') and activity['annotation'] != '':
+            self.content = self.unescape(re.sub('<[^<]+?>', '', activity['annotation'])) + ' '
+        self.content += self.unescape(re.sub('<[^<]+?>', '', activity['object']['content']))
 
         # 取链接里的文本
         if activity['object'].has_key('attachments'):
