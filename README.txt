@@ -55,7 +55,7 @@ python buzz2weibo.py
 建议
 ----
 
-建议在Linux下使用，cron里设为每分钟执行一次
+建议在Linux下使用，cron里设为每5分钟执行一次
 
 
 链接
