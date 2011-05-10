@@ -17,6 +17,7 @@ import os, errno, sys
 
 WEIBO_APP_KEY = '3127127763'
 WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
+BUZZ_API_KEY = 'AIzaSyAJ1zTsHUb12l1LCJbB20Fxsh8dz3zWt1o'
 
 # 运行一次最多同步几条。缺省3。连续同步太多会被休息的
 WEIBO_MAX_SYNC_COUNT = 3
@@ -89,7 +90,7 @@ if USE_HTTPS:
     prefix = 'https://'
 else:
     prefix = 'http://'
-buzz_url=prefix + 'www.googleapis.com/buzz/v1/activities/' + BUZZ_USERID + '/@public?alt=json'
+buzz_url=prefix + 'www.googleapis.com/buzz/v1/activities/' + BUZZ_USERID + '/@public?alt=json&key=' + BUZZ_API_KEY
 
 # 读buzz
 fp = urlopen(buzz_url)
