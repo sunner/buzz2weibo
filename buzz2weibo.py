@@ -125,7 +125,8 @@ for item in items:
     # 解析buzz
     try:
         # 如果来源名是“Source Name”，就用SourceNameActivity处理
-        act = eval(item['source']['title'].replace(' ', '') + 'Activity(item)')
+        classname = filter(unicode.isalpha, item['source']['title']) + 'Activity'
+        act = eval(classname + '(item)')
     except (NameError, SyntaxError):
         # SourceNameActivity没有，或者Source Name是中文，用WildcardActivity做缺省处理
         act = WildcardActivity(item);

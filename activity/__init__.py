@@ -22,3 +22,4 @@ from gtalk import GooglechatstatusActivity
 from twitter import TwitterActivity
 from gmaps import GoogleMapsformobileActivity
 from sunner import HelloWorldActivity
+from checkin import GoogleLatitudeCheckinActivity
