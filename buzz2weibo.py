@@ -62,7 +62,7 @@ def post2weibo(api, act):
                 # 微博太长，剪裁且留原始链接。原始链接不会太长，所以不会死循环
                 message = unicode(message, 'utf-8')[0:80] + u'....更多:'
                 message = message.encode('utf-8') + act.origin_link
-                print u'内容过长，截断发表:'
+                print '内容过长，截断发表:'
                 print message
             else:
                 raise
