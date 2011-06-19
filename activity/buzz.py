@@ -10,6 +10,7 @@
 
 import re
 import htmllib
+import urllib
 
 class BuzzActivity(object):
     
@@ -35,6 +36,9 @@ class BuzzActivity(object):
 
         # t.cn只支持http
         self.link = self.https2http(self.link)
+
+        # 将链接中特殊字符及中文转为%XX的形式
+        self.link = urllib.quote(self.link)
 
 
     def setID(self, activity):
