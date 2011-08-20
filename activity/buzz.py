@@ -93,6 +93,7 @@ class BuzzActivity(object):
                        not self.image_filename.lower().endswith('.gif'):
                             # 先不管三七二一，都当jpg吧
                             self.image_filename += '.jpg'
+                    break;  # 只留第一个图
 
 
     def setOriginLink(self, activity):
