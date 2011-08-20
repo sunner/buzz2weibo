@@ -24,7 +24,7 @@ WEIBO_MAX_SYNC_COUNT = 3
 
 def post2weibo(api, act):
     
-    message = act.content + act.link
+    message = act.content + ' ' + act.link
     if APPEND_SHARE_FROM_BUZZ_LINK:
         message += u' //转发自%s'.encode('utf-8') % act.origin_link
 
