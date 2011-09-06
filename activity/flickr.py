@@ -26,9 +26,7 @@ class FlickrActivity(BuzzActivity):
                     break;  # 只留第一个图
 
     def setContent(self, activity):
-#        super(FlickrActivity, self).setContent(activity)
-        if self.content != '':
-            self.content = u'我上传了一批图片: %s ' % self.content
+        self.content = u'我上传了一批图片: %s ' % self.content
 
     def setLink(self, activity):
         super(FlickrActivity, self).setLink(activity)
