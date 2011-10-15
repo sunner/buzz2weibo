@@ -17,25 +17,35 @@ WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
 
 print '''欢迎使用buzz2weibo配置向导！
 ===========================
-本向导会使用您输入的数据，在当前目录创建config.py文件。
+本向导会使用您输入的数据，在当前目录创建config.py文件。 '''
+
+print '''
+---------------------------
+Google+的API单个KEY每日只能请求1000次。所以您必须申请一个自己的Google API Key
+请访问 https://code.google.com/apis/console/ ，
+然后Create Project，Enable Google+ API，再转到API Access页面，
+Simple API Access中的API key就是你要得到的。拷贝粘贴到下面。
 '''
 
-print '''为了获得您的BuzzID，请访问 http://profiles.google.com 
+google_api_key = raw_input('请输入Google API key：').strip()
+
+print '''
+---------------------------
+为了获得您的Google用户ID，请访问 https://plus.google.com/me
 登录后，地址栏会变成类似这样：
-http://profiles.google.com/u/0/106019261651260565998/about
-或者这样：
-http://profiles.google.com/u/0/sunner/about
-无论是哪样，其中最长的那串纯数字，或者您的google用户名就是您的BuzzID
-但如果链接中没有您的用户名，那么就只有那串纯数字是您的BuzzID
+https://plus.google.com/106019261651260565998/posts
+其中最长的那串纯数字，就是您的Google用户ID
 '''
-buzz_userid = raw_input('请输入BuzzID：').strip()
+buzz_userid = raw_input('请输入Google用户ID：').strip()
 
-print '''验证BuzzID'''
-people_url = 'https://www.googleapis.com/buzz/v1/people/' + buzz_userid + '/@self?alt=json'
+print '''
+---------------------------
+开始验证Google API key和用户ID'''
+people_url = 'https://www.googleapis.com/plus/v1/people/' + buzz_userid + '?key=' + google_api_key
 fp = urlopen(people_url)
 people = load(fp)
 fp.close()
-yn = raw_input('您的姓名是“%s”吗？(Y/N)：' % people['data']['displayName'].encode('utf-8')).strip()
+yn = raw_input('您在Google+的名字是“%s”吗？(Y/N)：' % people['displayName'].encode('utf-8')).strip()
 
 if yn[0].lower() != 'y':
     print '''请重新运行本向导，输入正确的BuzzID。'''
@@ -67,13 +77,16 @@ weibo_token_secret = token.secret
 # Generate config.py
 config = u'''# vim: set fileencoding=utf-8 :
 
+# Google API key
+GOOGLE_API_KEY = '%s'
+
 # 用户参数
 BUZZ_USERID = '%s'
 WEIBO_TOKEN_KEY = '%s'
 WEIBO_TOKEN_SECRET = '%s'
 
 # 是否使用https连接google
-USE_HTTPS = False
+USE_HTTPS = True  # Google+ API只支持https
 
 # 保存同步历史的文件路径
 HISTORY_FILE = '%s.buzz2weibo_history'
@@ -86,7 +99,7 @@ DEBUG = False
 
 # 是否附带buzz链接
 APPEND_SHARE_FROM_BUZZ_LINK = True
-''' % (buzz_userid, weibo_token_key, weibo_token_secret, sys.path[0] + os.sep)
+''' % (google_api_key, buzz_userid, weibo_token_key, weibo_token_secret, sys.path[0] + os.sep)
 
 fp = codecs.open('config.py', 'w', 'utf-8')
 fp.write(config)

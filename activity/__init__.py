@@ -24,3 +24,4 @@ from gmaps import GoogleMapsformobileActivity
 from sunner import HelloWorldActivity
 from checkin import GoogleLatitudeCheckinActivity
 from flickr import FlickrActivity
+from gplus import GooglePlusActivity

@@ -1,7 +1,9 @@
-buzz2weibo - 同步Google Buzz到新浪微博
+buzz2weibo - 同步Google+到新浪微博
 ======================================
 
-将您自己Google Buzz上的public消息转发到新浪微博，可包括文字、图片、链接和地理坐标
+将Google+上的public消息转发到新浪微博，可包括文字、图片、链接和地理坐标
+
+注：原为Google Buzz开发，所以叫buzz2weibo
 
 特性
 ----
@@ -9,11 +11,10 @@ buzz2weibo - 同步Google Buzz到新浪微博
 * 同步文字，这个自然
 * 将buzz中的第一个图片上传
 * 同步地理坐标，如果有的话
-* 如果buzz附有链接，或者是发自Google Reader，链接也被同步
+* 如果buzz附有链接，也被同步
 * 每次运行缺省只同步3条，防止被新浪微博暂时封禁
-* 只同步public的buzz，保护private的私密
-* 在新浪微博显示到buzz的链接
-* 如果会编程，activity/下从BuzzActivity派生一个类，可以个性化处理特定的源（比如你的博客）
+* 只同步public的消息，保护私密
+* 在新浪微博显示到Google+的链接
 
 
 运行条件

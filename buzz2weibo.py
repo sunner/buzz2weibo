@@ -17,7 +17,6 @@ import os, errno, sys
 
 WEIBO_APP_KEY = '3127127763'
 WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
-BUZZ_API_KEY = 'AIzaSyAJ1zTsHUb12l1LCJbB20Fxsh8dz3zWt1o'
 
 # 运行一次最多同步几条。缺省3。连续同步太多会被休息的
 WEIBO_MAX_SYNC_COUNT = 3
@@ -86,11 +85,7 @@ except OSError, e:
     else:
         raise
 
-if USE_HTTPS:
-    prefix = 'https://'
-else:
-    prefix = 'http://'
-buzz_url=prefix + 'www.googleapis.com/buzz/v1/activities/' + BUZZ_USERID + '/@public?alt=json&key=' + BUZZ_API_KEY
+buzz_url = 'https://www.googleapis.com/plus/v1/people/' + BUZZ_USERID + '/activities/public?key=' + GOOGLE_API_KEY
 
 # 读buzz
 fp = urlopen(buzz_url)
@@ -118,24 +113,16 @@ except IOError, e:
 
 # 开始同步
 count = 0
-items = buzz['data']['items']
+items = buzz['items']
 items.reverse()  # Buzz是后发的在前，所以翻转一下。感谢王瑞珩的建议
 for item in items:
 
-    # 解析buzz
-    try:
-        # 如果来源名是“Source Name”，就用SourceNameActivity处理
-        classname = filter(unicode.isalpha, item['source']['title']) + 'Activity'
-        act = eval(classname + '(item)')
-    except (NameError, SyntaxError):
-        # SourceNameActivity没有，或者Source Name是中文，用WildcardActivity做缺省处理
-        act = WildcardActivity(item);
+    act = GooglePlusActivity(item);
 
     # 同步未同步过的
     if act.id not in synced_ids:
         print '-----------------------'
         print 'syncing ' + act.id
-        print item['source']['title']
         print act.origin_link
         if act.content != '':
             print act.content
