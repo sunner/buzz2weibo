@@ -60,6 +60,11 @@ class GooglePlusActivity(object):
         # 用title做微博内容，并去掉所有html tag
         self.content = self.unescape(re.sub('<[^<]+?>', '', activity['title']))
 
+        # share的post要加上用户自己的话
+        if (activity['verb'] == 'share' and activity['annotation'] != ''):
+            self.content = activity['annotation'] + ' ' + self.content;
+
+
         # 取链接里的文本，如果有的话
         if activity['object'].has_key('attachments'):
             for attach in activity['object']['attachments']:
