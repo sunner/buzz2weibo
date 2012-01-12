@@ -83,6 +83,10 @@ class GooglePlusActivity(object):
     def setImage(self, activity):
         """从activity取出应发到微博的图片地址"""
 
+        # Google Reader会把full image的链接设原文链接，所以不能将其上传
+        if activity['provider']['title'] == 'Google Reader':
+            return
+
         if activity['object'].has_key('attachments'):
             for attach in activity['object']['attachments']:
                 if attach['objectType'] == 'photo':
