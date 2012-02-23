@@ -27,11 +27,6 @@ def post2weibo(api, act):
     if APPEND_SHARE_FROM_BUZZ_LINK:
         message += u' //转发自%s'.encode('utf-8') % act.origin_link
 
-    if act.geo != '':
-        geo = act.geo.split(' ')
-    else:
-        geo = [None, None]
-
     include_image = False
     if act.image != '':
 
@@ -53,9 +48,9 @@ def post2weibo(api, act):
     while (True):
         try:
             if include_image:
-                api.upload(filename, status=message, lat=geo[0], long=geo[1])
+                api.upload(filename, status=message, lat=act.geo[0], long=act.geo[1])
             else:
-                api.update_status(status=message, lat=geo[0], long=geo[1])
+                api.update_status(status=message, lat=act.geo[0], long=act.geo[1])
         except WeibopError, e:
             if e.reason.find('error_code:400,40013:Error:') == 0:
                 # 微博太长，剪裁且留原始链接。原始链接不会太长，所以不会死循环

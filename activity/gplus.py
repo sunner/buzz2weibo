@@ -13,7 +13,7 @@ import urllib
 class GooglePlusActivity(object):
     
     link = ''
-    geo = ''
+    geo = [None, None]
     content = ''
     image = ''
     image_filename = ''
@@ -77,7 +77,10 @@ class GooglePlusActivity(object):
         """从activity取出经纬坐标"""
 
         if activity.has_key('geocode'):
-            self.geo = activity['geocode']
+            self.geo = activity['geocode'].split(' ')
+            # 修正天杀的误差
+            self.geo[0] = str(float(self.geo[0]) + 0.0019953)
+            self.geo[1] = str(float(self.geo[1]) + 0.0059628)
 
 
     def setImage(self, activity):
