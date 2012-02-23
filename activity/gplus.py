@@ -123,7 +123,6 @@ class GooglePlusActivity(object):
         """转换成员变量字符集"""
 
         self.link           = self.link.encode(codeset)
-        self.geo            = self.geo.encode(codeset)
         self.content        = self.content.encode(codeset)
         self.image          = self.image.encode(codeset)
         self.image_filename = self.image_filename.encode(codeset)
