@@ -32,9 +32,6 @@ class GooglePlusActivity(object):
         # 不用utf-8，weibopy罢工，命令行重定向之类也出错
         self.encode('utf-8')
 
-        # t.cn只支持http
-        self.link = self.https2http(self.link)
-
         # 将链接中特殊字符及中文转为%XX的形式
         self.link = urllib.quote(self.link)
 
@@ -108,8 +105,7 @@ class GooglePlusActivity(object):
     def setOriginLink(self, activity):
         """从activity取出到g+的链接"""
 
-        # t.cn只支持http
-        self.origin_link = self.https2http(activity['url'])
+        self.origin_link = activity['url']
 
     def unescape(self, s):
         """解码html转义"""
