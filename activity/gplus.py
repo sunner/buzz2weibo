@@ -9,14 +9,22 @@
 import re
 import htmllib
 import urllib
+import hashlib
+
+class gplus_image:
+    url = ''
+    filename = ''
+
+    def __init__(self, url, filename):
+        self.url = url
+        self.filename = filename
 
 class GooglePlusActivity(object):
     
     link = ''
     geo = [None, None]
     content = ''
-    image = ''
-    image_filename = ''
+    images = []
     id = ''
     origin_link = ''
 
@@ -83,6 +91,8 @@ class GooglePlusActivity(object):
     def setImage(self, activity):
         """从activity取出应发到微博的图片地址"""
 
+        self.images = []
+
         # Google Reader会把full image的链接设原文链接，所以不能将其上传
         if activity['provider']['title'] == 'Google Reader':
             return
@@ -91,15 +101,15 @@ class GooglePlusActivity(object):
             for attach in activity['object']['attachments']:
                 if attach['objectType'] == 'photo':
                     image = attach['fullImage']
-                    self.image = self.https2http(image['url'])
+                    url = self.https2http(image['url']).encode('UTF-8')
 
                     if image.has_key('content'):
-                        self.image_filename = attach['content']
+                        filename = attach['content']
                     else:
                         # 从type里取扩展名
-                        self.image_filename = 'tempname.' + image['type'].split('/')[-1]
+                        filename = hashlib.md5(url).hexdigest() + '.' + image['type'].split('/')[-1]
 
-                    break;  # 只留第一个图 TODO: 合并多个图
+                    self.images.append(gplus_image(url, filename))
 
 
     def setOriginLink(self, activity):
@@ -120,8 +130,6 @@ class GooglePlusActivity(object):
 
         self.link           = self.link.encode(codeset)
         self.content        = self.content.encode(codeset)
-        self.image          = self.image.encode(codeset)
-        self.image_filename = self.image_filename.encode(codeset)
         self.id             = self.id.encode(codeset)
         self.origin_link    = self.origin_link.encode(codeset)
 

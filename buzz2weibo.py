@@ -14,6 +14,7 @@ from weibopy.api import API
 from weibopy.error import WeibopError
 from time import sleep
 import os, errno, sys
+import Image
 
 WEIBO_APP_KEY = '3127127763'
 WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
@@ -21,34 +22,74 @@ WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
 # 运行一次最多同步几条。缺省3。连续同步太多会被休息的
 WEIBO_MAX_SYNC_COUNT = 3
 
+'''Concatenate multiply images as one from top to down'''
+def catimages(image_files, dst_image_file):
+
+    if len(image_files) <= 1:
+        return image_files[0]
+
+    images = []
+    max_width = 0
+
+    '''Load images and get the max width'''
+    for f in image_files:
+        img = Image.open(f)
+        images.append(img)
+
+        width, height = img.size
+        if width > max_width:
+            max_width = width
+
+    '''resize all images to max_width'''
+    total_height = 0
+    resized_images = []
+    for img in images:
+        width, height = img.size
+        new_height = max_width / width * height
+        resized_images.append(img.resize((max_width, new_height)))
+        total_height = total_height + new_height
+
+    '''concatenate them'''
+    result_img = Image.new('RGB', (max_width, total_height))
+    ypos = 0
+    for img in resized_images:
+        result_img.paste(img, (0, ypos))
+        ypos = ypos + img.size[1]
+
+    result_img.save(dst_image_file)
+
+
 def post2weibo(api, act):
     
     message = act.content + ' ' + act.link
     if APPEND_SHARE_FROM_BUZZ_LINK:
         message += u' //转发自%s'.encode('utf-8') % act.origin_link
 
-    include_image = False
-    if act.image != '':
-
+    imagefiles = []
+    for image in act.images:
         # 下载图像文件
         try:
-            u = urlopen(act.image);
+            u = urlopen(image.url);
             data = u.read()
             u.close()
         except URLError:
             # 如果下载不下来，表示……，就别试了，当普通消息发吧
             pass
         else:
-            filename = IMAGES_PATH + '/' + act.image_filename
+            filename = IMAGES_PATH + '/' + image.filename
             f = open(filename, 'w')
             f.write(data)
             f.close()
-            include_image = True
+            imagefiles.append(filename)
+
+    if len(imagefiles) > 0:
+        imagefile = IMAGES_PATH + '/' + 'final.jpg'
+        catimages(imagefiles, imagefile)
 
     while (True):
         try:
-            if include_image:
-                api.upload(filename, status=message, lat=act.geo[0], long=act.geo[1])
+            if len(imagefiles) > 0:
+                api.upload(imagefile, status=message, lat=act.geo[0], long=act.geo[1])
             else:
                 api.update_status(status=message, lat=act.geo[0], long=act.geo[1])
         except WeibopError, e:
@@ -123,10 +164,8 @@ for item in items:
             print act.content
         if act.link != '':
             print act.link
-        if act.image != '':
-            print act.image
-        if act.image_filename != '':
-            print act.image_filename
+        for image in act.images:
+            print image.url
         if act.geo != '':
             print act.geo
 
