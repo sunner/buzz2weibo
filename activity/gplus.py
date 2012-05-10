@@ -11,13 +11,19 @@ import htmllib
 import urllib
 import hashlib
 
-class gplus_image:
+class gplus_image(object):
     url = ''
     filename = ''
 
     def __init__(self, url, filename):
         self.url = url
         self.filename = filename
+
+    def encode(self, codeset):
+        self.url = self.url.encode(codeset)
+        self.filename = self.filename.encode(codeset)
+        return self
+
 
 class GooglePlusActivity(object):
     
@@ -69,14 +75,11 @@ class GooglePlusActivity(object):
         if (activity['verb'] == 'share' and activity['annotation'] != ''):
             self.content = activity['annotation'] + ' ' + self.content;
 
-
         # 取链接里的文本，如果有的话
         if activity['object'].has_key('attachments'):
             for attach in activity['object']['attachments']:
                 if attach['objectType'] == 'article':
                     self.content += ' ' + attach['displayName']
-
-
 
     def setGeo(self, activity):
         """从activity取出经纬坐标"""
@@ -101,13 +104,13 @@ class GooglePlusActivity(object):
             for attach in activity['object']['attachments']:
                 if attach['objectType'] == 'photo':
                     image = attach['fullImage']
-                    url = self.https2http(image['url']).encode('UTF-8')
+                    url = self.https2http(image['url'])
 
                     if image.has_key('content'):
                         filename = attach['content']
                     else:
                         # 从type里取扩展名
-                        filename = hashlib.md5(url).hexdigest() + '.' + image['type'].split('/')[-1]
+                        filename = hashlib.md5(url.encode('UTF-8')).hexdigest() + '.' + image['type'].split('/')[-1]
 
                     self.images.append(gplus_image(url, filename))
 
@@ -132,6 +135,7 @@ class GooglePlusActivity(object):
         self.content        = self.content.encode(codeset)
         self.id             = self.id.encode(codeset)
         self.origin_link    = self.origin_link.encode(codeset)
+        self.images         = [s.encode(codeset) for s in self.images]
 
     def https2http(self, httpslink):
         """将https链接转为http链接"""
