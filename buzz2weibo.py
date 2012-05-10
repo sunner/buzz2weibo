@@ -23,7 +23,7 @@ WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
 WEIBO_MAX_SYNC_COUNT = 3
 
 '''Concatenate multiply images as one from top to down'''
-def catimages(image_files, dst_image_file):
+def catimages(image_files):
 
     if len(image_files) <= 1:
         return image_files[0]
@@ -56,8 +56,9 @@ def catimages(image_files, dst_image_file):
         result_img.paste(img, (0, ypos))
         ypos = ypos + img.size[1]
 
-    result_img.save(dst_image_file)
-
+    imagefile = IMAGES_PATH + '/' + 'final.jpg'
+    result_img.save(imagefile)
+    return imagefile
 
 def post2weibo(api, act):
     
@@ -83,8 +84,7 @@ def post2weibo(api, act):
             imagefiles.append(filename)
 
     if len(imagefiles) > 0:
-        imagefile = IMAGES_PATH + '/' + 'final.jpg'
-        catimages(imagefiles, imagefile)
+        imagefile = catimages(imagefiles)
 
     while (True):
         try:
