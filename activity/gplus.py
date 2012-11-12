@@ -8,7 +8,6 @@
 
 import re
 import htmllib
-import urllib
 import hashlib
 
 class gplus_image(object):
@@ -28,7 +27,7 @@ class gplus_image(object):
 class GooglePlusActivity(object):
     
     link = ''
-    geo = [None, None]
+    geo = ['0.0', '0.0']
     content = ''
     images = []
     id = ''
@@ -45,9 +44,6 @@ class GooglePlusActivity(object):
 
         # 不用utf-8，weibopy罢工，命令行重定向之类也出错
         self.encode('utf-8')
-
-        # 将链接中特殊字符及中文转为%XX的形式
-        self.link = urllib.quote(self.link)
 
 
     def setID(self, activity):

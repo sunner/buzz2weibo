@@ -5,8 +5,7 @@
 # Copyright 2011 Sun Zhigang
 # See LICENSE for details.
 
-from weibopy.auth import OAuthHandler
-from weibopy.api import API
+from weibo import APIClient
 from urllib2 import urlopen, URLError, HTTPError
 from json import load
 import sys, os
@@ -51,12 +50,12 @@ if yn[0].lower() != 'y':
     print '''请重新运行本向导，输入正确的BuzzID。'''
     sys.exit(1)
 
-# OAuth begins
+# OAuth 2.0 begins
 
-auth = OAuthHandler(WEIBO_APP_KEY, WEIBO_APP_SECRET)
-auth_url = auth.get_authorization_url()
+auth = APIClient(WEIBO_APP_KEY, WEIBO_APP_SECRET, 'https://api.weibo.com/oauth2/default.html')
+auth_url = auth.get_authorize_url()
 print ''
-print '请在浏览器中访问下面链接，授权给buzz2weibo后，会获得一个授权码。'
+print '请在浏览器中访问下面链接，授权给buzz2weibo后，会在跳转到的页面url中code参数后面看到授权码'
 print ''
 print auth_url
 print ''
@@ -64,15 +63,15 @@ print ''
 while True:
     verifier = raw_input('请输入授权码：').strip()
     try:
-        token = auth.get_access_token(verifier)
+        token = auth.request_access_token(verifier)
     except HTTPError:
         print '授权码不正确或者过期，请重新运行本向导'
         sys.exit(1)
     else:
         break
 
-weibo_token_key = token.key
-weibo_token_secret = token.secret
+weibo_token = token.access_token
+weibo_token_expires = token.expires_in
 
 # Generate config.py
 config = u'''# vim: set fileencoding=utf-8 :
@@ -82,8 +81,8 @@ GOOGLE_API_KEY = '%s'
 
 # 用户参数
 BUZZ_USERID = '%s'
-WEIBO_TOKEN_KEY = '%s'
-WEIBO_TOKEN_SECRET = '%s'
+WEIBO_TOKEN = '%s'
+WEIBO_TOKEN_EXPIRES = '%s'
 
 # 是否使用https连接google
 USE_HTTPS = True  # Google+ API只支持https
@@ -99,7 +98,7 @@ DEBUG = False
 
 # 是否附带buzz链接
 APPEND_SHARE_FROM_BUZZ_LINK = True
-''' % (google_api_key, buzz_userid, weibo_token_key, weibo_token_secret, sys.path[0] + os.sep)
+''' % (google_api_key, buzz_userid, weibo_token, weibo_token_expires, sys.path[0] + os.sep)
 
 fp = codecs.open('config.py', 'w', 'utf-8')
 fp.write(config)

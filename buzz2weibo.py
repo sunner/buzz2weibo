@@ -5,13 +5,11 @@
 # Copyright 2011 Sun Zhigang
 # See LICENSE for details.
 
+from weibo import APIClient, APIError
 from config import *
 from urllib2 import urlopen, URLError
 from json import load
 from activity import *
-from weibopy.auth import OAuthHandler
-from weibopy.api import API
-from weibopy.error import WeibopError
 from time import sleep
 import os, errno, sys
 import Image
@@ -60,7 +58,7 @@ def catimages(image_files):
     result_img.save(imagefile)
     return imagefile
 
-def post2weibo(api, act):
+def post2weibo(client, act):
     
     message = act.content + ' ' + act.link
     if APPEND_SHARE_FROM_BUZZ_LINK:
@@ -89,10 +87,13 @@ def post2weibo(api, act):
     while (True):
         try:
             if len(imagefiles) > 0:
-                api.upload(imagefile, status=message, lat=act.geo[0], long=act.geo[1])
+                f = open(imagefile, 'rb');
+                client.statuses.upload.post(status=message, pic=f, lat=act.geo[0], long=act.geo[1])
+                f.close()
             else:
-                api.update_status(status=message, lat=act.geo[0], long=act.geo[1])
-        except WeibopError, e:
+                client.statuses.update.post(status=message, lat=act.geo[0], long=act.geo[1])
+        except APIError, e:
+            print e
             if e.reason.find('error_code:400,40013:Error:') == 0:
                 # 微博太长，剪裁且留原始链接。原始链接不会太长，所以不会死循环
                 message = unicode(message, 'utf-8')[0:80] + u'....更多:'
@@ -130,9 +131,8 @@ buzz = load(fp)
 fp.close()
 
 # 微博认证
-auth = OAuthHandler(WEIBO_APP_KEY, WEIBO_APP_SECRET)
-auth.setToken(WEIBO_TOKEN_KEY, WEIBO_TOKEN_SECRET)
-api = API(auth)
+client = APIClient(WEIBO_APP_KEY, WEIBO_APP_SECRET, 'https://api.weibo.com/oauth2/default.html')
+client.set_access_token(WEIBO_TOKEN, WEIBO_TOKEN_EXPIRES);
 
 
 # 读已经同步过的activity id
@@ -172,7 +172,7 @@ for item in items:
         if DEBUG:
             continue
 
-        if post2weibo(api, act):
+        if post2weibo(client, act):
             synced_ids.add(act.id)
 
             # 将同步过的activity id写入历史文件
