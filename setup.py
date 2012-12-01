@@ -11,8 +11,31 @@ from json import load
 import sys, os
 import codecs
 
+if os.path.isfile('config.py'):
+    from config import *
+else:
+    GOOGLE_API_KEY = ''
+    BUZZ_USERID = ''
+    WEIBO_TOKEN = ''
+    WEIBO_TOKEN_EXPIRES = ''
+    USE_HTTPS = u'True  # Google+ API只支持https'
+    HISTORY_FILE = sys.path[0] + os.sep + '.buzz2weibo_history'
+    IMAGES_PATH = '/tmp/buzz2weibo'
+    DEBUG = 'False'
+    APPEND_SHARE_FROM_BUZZ_LINK = 'False'
+
+
 WEIBO_APP_KEY = '3127127763'
 WEIBO_APP_SECRET = '21cc35f55fc8fe73b73162964c0bb415'
+
+def default_input(prompt, default):
+    if len(default) != 0:
+        prompt = prompt + '(回车使用上次配置"' + default +'")'
+    input = raw_input(prompt + ':').strip()
+    if len(input) == 0:
+        return default
+    else:
+        return input
 
 print '''欢迎使用buzz2weibo配置向导！
 ===========================
@@ -26,7 +49,7 @@ Google+的API单个KEY每日只能请求1000次。所以您必须申请一个自
 Simple API Access中的API key就是你要得到的。拷贝粘贴到下面。
 '''
 
-google_api_key = raw_input('请输入Google API key：').strip()
+GOOGLE_API_KEY = default_input('请输入Google API key', GOOGLE_API_KEY)
 
 print '''
 ---------------------------
@@ -35,12 +58,12 @@ print '''
 https://plus.google.com/106019261651260565998/posts
 其中最长的那串纯数字，就是您的Google用户ID
 '''
-buzz_userid = raw_input('请输入Google用户ID：').strip()
+BUZZ_USERID = default_input('请输入Google用户ID', BUZZ_USERID).strip()
 
 print '''
 ---------------------------
-开始验证Google API key和用户ID'''
-people_url = 'https://www.googleapis.com/plus/v1/people/' + buzz_userid + '?key=' + google_api_key
+正在验证Google API key和用户ID...'''
+people_url = 'https://www.googleapis.com/plus/v1/people/' + BUZZ_USERID + '?key=' + GOOGLE_API_KEY
 fp = urlopen(people_url)
 people = load(fp)
 fp.close()
@@ -70,8 +93,8 @@ while True:
     else:
         break
 
-weibo_token = token.access_token
-weibo_token_expires = token.expires_in
+WEIBO_TOKEN = token.access_token
+WEIBO_TOKEN_EXPIRES = token.expires_in
 
 # Generate config.py
 config = u'''# vim: set fileencoding=utf-8 :
@@ -85,20 +108,29 @@ WEIBO_TOKEN = '%s'
 WEIBO_TOKEN_EXPIRES = '%s'
 
 # 是否使用https连接google
-USE_HTTPS = True  # Google+ API只支持https
+USE_HTTPS = %s
 
 # 保存同步历史的文件路径
-HISTORY_FILE = '%s.buzz2weibo_history'
+HISTORY_FILE = '%s'
 
 # 下载然后传到微博的图片临时存放目录
-IMAGES_PATH = '/tmp/buzz2weibo'
+IMAGES_PATH = '%s'
 
 # 调试模式下，不会真的发微博，只打印状态
-DEBUG = False
+DEBUG = %s
 
 # 是否附带buzz链接
-APPEND_SHARE_FROM_BUZZ_LINK = True
-''' % (google_api_key, buzz_userid, weibo_token, weibo_token_expires, sys.path[0] + os.sep)
+APPEND_SHARE_FROM_BUZZ_LINK = %s
+''' % (GOOGLE_API_KEY,
+       BUZZ_USERID,
+       WEIBO_TOKEN,
+       WEIBO_TOKEN_EXPIRES,
+       USE_HTTPS,
+       HISTORY_FILE,
+       IMAGES_PATH,
+       DEBUG,
+       APPEND_SHARE_FROM_BUZZ_LINK)
+
 
 fp = codecs.open('config.py', 'w', 'utf-8')
 fp.write(config)
