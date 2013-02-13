@@ -108,6 +108,12 @@ class GooglePlusActivity(object):
                         # 从type里取扩展名
                         filename = hashlib.md5(url.encode('UTF-8')).hexdigest() + '.' + image['type'].split('/')[-1]
 
+                    # 如果是上传到Google的图，制造大图链接
+                    l = url.split('/')
+                    if l[2].find('googleusercontent.com') != -1:
+                        l.insert(-1, 's' + str(image['width']))
+                        url = '/'.join(l)
+
                     self.images.append(gplus_image(url, filename))
 
 
