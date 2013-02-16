@@ -96,25 +96,33 @@ class GooglePlusActivity(object):
         if activity['provider']['title'] == 'Google Reader':
             return
 
+        images = []
         if activity['object'].has_key('attachments'):
             for attach in activity['object']['attachments']:
-                if attach['objectType'] == 'photo':
-                    image = attach['fullImage']
-                    url = self.https2http(image['url'])
+                if attach.has_key('fullImage'):
+                    images.append(attach['fullImage'])
+                elif attach.has_key('thumbnails'):
+                    for thumbnail in attach['thumbnails']:
+                        images.append(thumbnail['image'])
 
-                    if image.has_key('content'):
-                        filename = attach['content']
-                    else:
-                        # 从type里取扩展名
-                        filename = hashlib.md5(url.encode('UTF-8')).hexdigest() + '.' + image['type'].split('/')[-1]
+            for image in images:
+                url = self.https2http(image['url'])
 
-                    # 如果是上传到Google的图，制造大图链接
-                    l = url.split('/')
-                    if l[2].find('googleusercontent.com') != -1:
-                        l.insert(-1, 's' + str(image['width']))
-                        url = '/'.join(l)
+                if image.has_key('content'):
+                    filename = attach['content']
+                else:
+                    # 从type里取扩展名
+                    filename = hashlib.md5(url.encode('UTF-8')).hexdigest() + '.' + image['type'].split('/')[-1]
 
-                    self.images.append(gplus_image(url, filename))
+                # 如果是上传到Google的图，制造大图链接
+                l = url.split('/')
+                if l[2].find('googleusercontent.com') != -1:
+                    if len(l) == 9: # 原链接中含有尺寸参数，删除之
+                        l.remove(l[-2])
+                    l.insert(-1, 's' + str(image['width']))
+                    url = '/'.join(l)
+
+                self.images.append(gplus_image(url, filename))
 
 
     def setOriginLink(self, activity):
