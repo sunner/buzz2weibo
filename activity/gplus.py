@@ -119,7 +119,7 @@ class GooglePlusActivity(object):
                 if l[2].find('googleusercontent.com') != -1:
                     if len(l) == 9: # 原链接中含有尺寸参数，删除之
                         l.remove(l[-2])
-                    l.insert(-1, 's' + str(image['width']))
+                    l.insert(-1, 's0')  # s0就是最大图的意思
                     url = '/'.join(l)
 
                 self.images.append(gplus_image(url, filename))
