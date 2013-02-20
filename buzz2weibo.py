@@ -64,6 +64,10 @@ def post2weibo(client, act):
     if APPEND_SHARE_FROM_BUZZ_LINK:
         message += u' //转发自%s'.encode('utf-8') % act.origin_link
 
+    if message == ' ':
+      message = act.origin_link
+
+
     imagefiles = []
     for image in act.images:
         # 下载图像文件
