@@ -64,6 +64,10 @@ def post2weibo(client, act):
     if APPEND_SHARE_FROM_BUZZ_LINK:
         message += u' //转发自%s'.encode('utf-8') % act.origin_link
 
+    if message == ' ':
+        message = act.origin_link
+
+
     imagefiles = []
     for image in act.images:
         # 下载图像文件
@@ -94,14 +98,16 @@ def post2weibo(client, act):
                 client.statuses.update.post(status=message, lat=act.geo[0], long=act.geo[1])
         except APIError, e:
             print e
-            if e.reason.find('error_code:400,40013:Error:') == 0:
-                # 微博太长，剪裁且留原始链接。原始链接不会太长，所以不会死循环
+            if e.error_code == 20012:
+                #20012  ：  输入文字太长，请确认不超过140个字符
+                #微博太长，剪裁且留原始链接。原始链接不会太长，所以不会死循环
                 message = unicode(message, 'utf-8')[0:80] + u'....更多:'
                 message = message.encode('utf-8') + act.origin_link
                 print '内容过长，截断发表:'
                 print message
             else:
-                raise
+                break
+                #raise
         else:
             break
 
